@@ -1,8 +1,10 @@
 package com.pricewatcher
 
+import com.pricewatcher.api.injection.ApiInjection
 import com.pricewatcher.config.Config
 import com.pricewatcher.modules.injection.ModulesInjection
 import com.typesafe.config.ConfigFactory
+import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
@@ -14,8 +16,7 @@ import org.koin.ktor.plugin.Koin
 
 fun main(args: Array<String>) {
 
-    val environment = System.getenv()["ENVIRONMENT"] ?: handleDefaultEnvironment()
-    val config = extractConfig(environment, HoconApplicationConfig(ConfigFactory.load()))
+    val config = extractConfig(HoconApplicationConfig(ConfigFactory.load()))
 
     embeddedServer(Netty, port = config.port) {
         println("Starting instance in ${config.host}:${config.port}")
@@ -26,6 +27,7 @@ fun main(args: Array<String>) {
                         single { config }
                         single { PrometheusMeterRegistry(PrometheusConfig.DEFAULT) }
                     },
+                    ApiInjection.koinBeans,
                     ModulesInjection.koinBeans
                 )
             }
@@ -34,20 +36,23 @@ fun main(args: Array<String>) {
     }.start(wait = true)
 }
 
-fun handleDefaultEnvironment(): String {
-    println("Falling back to default environment 'dev'")
-    return "dev"
-}
-
 fun Application.main() {
     module()
 }
 
-fun extractConfig(environment: String, hoconConfig: HoconApplicationConfig): Config {
+fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
+    val dotenv = dotenv()
+    val environment = dotenv["ENVIRONMENT"] ?: handleDefaultEnvironment()
+    val botApiKey = dotenv["TELEGRAM_API_KEY"]
+
     val hoconEnvironment = hoconConfig.config("ktor.deployment.$environment")
-    return Config(
-        hoconEnvironment.property("host").getString(),
-        Integer.parseInt(hoconEnvironment.property("port").getString())
-    )
+    val host = hoconEnvironment.property("host").getString()
+    val port = Integer.parseInt(hoconEnvironment.property("port").getString())
+
+    return Config(host, port, botApiKey)
 }
 
+fun handleDefaultEnvironment(): String {
+    println("Falling back to default environment 'dev'")
+    return "dev"
+}

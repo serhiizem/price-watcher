@@ -19,6 +19,9 @@ ktor {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
@@ -30,9 +33,11 @@ dependencies {
     implementation(Dependencies.ktorStatusPages)
     implementation(Dependencies.ktorMetricsMicrometer)
     implementation(Dependencies.koin)
+    implementation(Dependencies.telegramApi)
 
     implementation(Dependencies.logback)
     implementation(Dependencies.micrometerPrometeus)
+    implementation(Dependencies.dotEnv)
 
     testImplementation(Dependencies.koinTest)
     testImplementation(Dependencies.ktorServerTest)

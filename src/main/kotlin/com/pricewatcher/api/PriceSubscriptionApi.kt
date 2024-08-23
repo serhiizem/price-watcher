@@ -1,0 +1,3 @@
+package com.pricewatcher.api
+
+interface PriceSubscriptionApi

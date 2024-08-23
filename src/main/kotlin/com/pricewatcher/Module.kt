@@ -5,14 +5,12 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
-import io.ktor.server.http.content.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.pipeline.PipelineContext
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
@@ -58,13 +56,6 @@ fun Application.module() {
     }
 
     install(Routing) {
-        static("/static") {
-            resources("static")
-        }
         metrics()
     }
-}
-
-suspend fun PipelineContext<Unit, ApplicationCall>.sendOk() {
-    call.respond(HttpStatusCode.OK)
 }

@@ -12,7 +12,9 @@ object Dependencies {
         const val koinVersion = "3.3.3"
         const val telegramApiVersion = "6.2.0"
 
-        const val micrometerPrometeusVersion = "1.10.3"
+        const val awsBomVersion = "2.27.11"
+
+        const val micrometerPrometheusVersion = "1.10.3"
         const val logbackVersion = "1.4.5"
         const val dotEnvVersion = "6.4.1"
 
@@ -31,7 +33,11 @@ object Dependencies {
     const val koin = "io.insert-koin:koin-ktor:${Versions.koinKtorVersion}"
     const val telegramApi = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:${Versions.telegramApiVersion}"
 
-    const val micrometerPrometeus = "io.micrometer:micrometer-registry-prometheus:${Versions.micrometerPrometeusVersion}"
+    const val awsDynamoDb = "software.amazon.awssdk:dynamodb:${Versions.awsBomVersion}"
+    const val awsDynamoDbEnhanced = "software.amazon.awssdk:dynamodb-enhanced:${Versions.awsBomVersion}"
+
+    const val micrometerPrometheus =
+        "io.micrometer:micrometer-registry-prometheus:${Versions.micrometerPrometheusVersion}"
     const val logback = "ch.qos.logback:logback-classic:${Versions.logbackVersion}"
     const val dotEnv = "io.github.cdimascio:dotenv-kotlin:${Versions.dotEnvVersion}"
 

@@ -35,8 +35,11 @@ dependencies {
     implementation(Dependencies.koin)
     implementation(Dependencies.telegramApi)
 
+    implementation(Dependencies.awsDynamoDb)
+    implementation(Dependencies.awsDynamoDbEnhanced)
+
     implementation(Dependencies.logback)
-    implementation(Dependencies.micrometerPrometeus)
+    implementation(Dependencies.micrometerPrometheus)
     implementation(Dependencies.dotEnv)
 
     testImplementation(Dependencies.koinTest)

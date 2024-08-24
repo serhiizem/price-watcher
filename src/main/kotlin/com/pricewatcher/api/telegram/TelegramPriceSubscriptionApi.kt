@@ -6,13 +6,15 @@ import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.ChatId
 import com.pricewatcher.api.PriceSubscriptionApi
 import com.pricewatcher.config.Config
+import com.pricewatcher.domain.AssetPriceSubscription
+import com.pricewatcher.extensions.toAssetPriceSubscription
 import com.pricewatcher.util.LoggerFactory
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 object TelegramPriceSubscriptionApi : PriceSubscriptionApi, KoinComponent {
 
-    private val log = LoggerFactory.getKtorLogger(this)
+    private val log = LoggerFactory.getLogger(this)
     private val config by inject<Config>()
 
     init {
@@ -24,7 +26,8 @@ object TelegramPriceSubscriptionApi : PriceSubscriptionApi, KoinComponent {
                     log.info("Received message: $text")
                     if (text.startsWith("/notify")) {
                         val chatId = message.chat.id
-                        bot.sendMessage(chatId = ChatId.fromId(chatId), text = "subscribed to $text")
+                        val subscription = message.toAssetPriceSubscription()
+                        bot.sendMessage(chatId = ChatId.fromId(chatId), text = "subscribed to $subscription")
                     }
                 }
             }

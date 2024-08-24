@@ -2,7 +2,7 @@ package com.pricewatcher.api.telegram
 
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
-import com.github.kotlintelegrambot.dispatcher.command
+import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.ChatId
 import com.pricewatcher.api.PriceSubscriptionApi
 import com.pricewatcher.config.Config
@@ -20,17 +20,17 @@ object TelegramPriceSubscriptionApi : PriceSubscriptionApi, KoinComponent {
         val bot = bot {
             token = config.botApiKey
             dispatch {
-                command("start") {
-                    println("Received message: ${message.text}")
-                    val result = bot.sendMessage(chatId = ChatId.fromId(message.chat.id), text = "Hi there!")
-                    result.fold({
-                        // do something here with the response
-                    }, {
-                        // do something with the error
-                    })
+                text {
+                    log.info("Received message: $text")
+                    if (text.startsWith("/notify")) {
+                        val chatId = message.chat.id
+                        bot.sendMessage(chatId = ChatId.fromId(chatId), text = "subscribed to $text")
+                    }
                 }
             }
         }
-        bot.startPolling()
+        bot.startPolling().apply {
+            log.info("Telegram subscription bot is polling for messages")
+        }
     }
 }

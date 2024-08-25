@@ -41,13 +41,13 @@ object SubscriptionsTable : SubscriptionsDao, KoinComponent {
     }
 
     override fun findAll(): List<AssetPriceSubscription> {
-        val results: MutableList<SubscriptionEntity> = ArrayList()
+        val results: MutableList<AssetPriceSubscription> = ArrayList()
 
         table.scan().items()
-            .subscribe { results.add(it) }
+            .subscribe { results.add(it.toDomain()) }
             .join()
 
-        return results.map { it.toDomain() }
+        return results
     }
 }
 

@@ -14,6 +14,8 @@ import org.koin.core.component.inject
 
 object ExternalQuotesService : QuotesService, KoinComponent {
 
+    private val config by inject<Config>()
+
     private val client = HttpClient(CIO) {
         install(ContentNegotiation) {
             json()
@@ -22,8 +24,6 @@ object ExternalQuotesService : QuotesService, KoinComponent {
             url("https://financialmodelingprep.com/api/v3/")
         }
     }
-
-    private val config by inject<Config>()
 
     override suspend fun getSimpleQuote(symbol: String): SimpleQuote {
         val quoteResponse: List<SimpleQuote> =

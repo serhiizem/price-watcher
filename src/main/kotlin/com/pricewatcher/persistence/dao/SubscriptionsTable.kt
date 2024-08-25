@@ -4,6 +4,7 @@ import com.pricewatcher.config.Config
 import com.pricewatcher.domain.AssetPriceSubscription
 import com.pricewatcher.persistence.ddl.TableCreator
 import com.pricewatcher.persistence.entities.SubscriptionEntity
+import com.pricewatcher.persistence.entities.toDomain
 import com.pricewatcher.persistence.entities.toEntity
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -38,8 +39,19 @@ object SubscriptionsTable : SubscriptionsDao, KoinComponent {
 
         table.putItem(putItemRequest)
     }
+
+    override fun findAll(): List<AssetPriceSubscription> {
+        val results: MutableList<SubscriptionEntity> = ArrayList()
+
+        table.scan().items()
+            .subscribe { results.add(it) }
+            .join()
+
+        return results.map { it.toDomain() }
+    }
 }
 
 interface SubscriptionsDao {
     fun save(subscription: AssetPriceSubscription)
+    fun findAll(): List<AssetPriceSubscription>
 }

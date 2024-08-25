@@ -5,6 +5,7 @@ object Dependencies {
     object Versions {
         const val shadowJarVersion = "5.0.0"
         const val kotlinPluginVersion = "1.8.0"
+        const val kotlinPluginSerializationVersion = "2.0.0"
         const val ktorPluginVersion = "2.2.3"
         const val ktorVersion = "2.2.3"
         const val koinKtorVersion = "3.3.1"
@@ -31,6 +32,8 @@ object Dependencies {
     const val ktorMetricsMicrometer = "io.ktor:ktor-server-metrics-micrometer:${Versions.ktorVersion}"
     const val ktorClientCore = "io.ktor:ktor-client-core:${Versions.ktorVersion}"
     const val ktorClientEngine = "io.ktor:ktor-client-cio:${Versions.ktorVersion}"
+    const val ktorClientContentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktorVersion}"
+    const val ktorSerializationJson = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktorVersion}"
 
     const val koin = "io.insert-koin:koin-ktor:${Versions.koinKtorVersion}"
     const val telegramApi = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:${Versions.telegramApiVersion}"

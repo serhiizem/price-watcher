@@ -4,6 +4,7 @@ version = AppConfig.versionName
 plugins {
     kotlin("jvm") version Dependencies.Versions.kotlinPluginVersion
     id("io.ktor.plugin") version Dependencies.Versions.ktorPluginVersion
+    kotlin("plugin.serialization") version Dependencies.Versions.kotlinPluginSerializationVersion
     id("com.github.johnrengelman.shadow") version Dependencies.Versions.shadowJarVersion
 }
 
@@ -34,6 +35,8 @@ dependencies {
     implementation(Dependencies.ktorMetricsMicrometer)
     implementation(Dependencies.ktorClientCore)
     implementation(Dependencies.ktorClientEngine)
+    implementation(Dependencies.ktorClientContentNegotiation)
+    implementation(Dependencies.ktorSerializationJson)
     implementation(Dependencies.koin)
     implementation(Dependencies.telegramApi)
 

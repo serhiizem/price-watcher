@@ -1,3 +1,5 @@
 package com.pricewatcher.api
 
-interface PriceSubscriptionApi
+interface PriceSubscriptionApi {
+    fun sendMessageTo(message: String, receiver: String)
+}

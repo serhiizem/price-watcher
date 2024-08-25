@@ -1,5 +1,6 @@
 package com.pricewatcher.api.telegram
 
+import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.text
@@ -18,9 +19,11 @@ object TelegramSubscriptionApi : PriceSubscriptionApi, KoinComponent {
     private val config by inject<Config>()
     private val subscriptionsDao by inject<SubscriptionsDao>()
 
+    private val bot: Bot
+
     init {
         log.info("Staring telegram subscription bot")
-        val bot = bot {
+        bot = bot {
             token = config.botApiKey
             dispatch {
                 text {
@@ -42,5 +45,17 @@ object TelegramSubscriptionApi : PriceSubscriptionApi, KoinComponent {
         bot.startPolling().apply {
             log.info("Telegram subscription bot is polling for messages")
         }
+    }
+
+    override fun sendMessageTo(message: String, receiver: String) {
+        val result = bot.sendMessage(
+            chatId = ChatId.fromId(receiver.toLong()),
+            text = message
+        )
+        result.fold({
+            log.info("Message has been sent to: $receiver")
+        }, {
+            log.error("Error occurred when sending message to: $receiver")
+        })
     }
 }

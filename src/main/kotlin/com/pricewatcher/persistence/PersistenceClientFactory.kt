@@ -9,7 +9,7 @@ import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient
 import java.net.URI
 
-object DynamoClientFactory : KoinComponent {
+object PersistenceClientFactory : KoinComponent {
 
     private val config by inject<Config>()
 
@@ -23,5 +23,5 @@ object DynamoClientFactory : KoinComponent {
         )
         .build()
 
-    fun get(): DynamoDbEnhancedAsyncClient = asyncClient
+    fun dynamoDbClient(): DynamoDbEnhancedAsyncClient = asyncClient
 }

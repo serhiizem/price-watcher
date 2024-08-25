@@ -3,7 +3,6 @@ package com.pricewatcher
 import com.pricewatcher.api.injection.ApiInjection
 import com.pricewatcher.config.Config
 import com.pricewatcher.modules.injection.ModulesInjection
-import com.pricewatcher.persistence.DynamoClientFactory
 import com.pricewatcher.persistence.injection.DaoInjection
 import com.typesafe.config.ConfigFactory
 import io.github.cdimascio.dotenv.dotenv
@@ -16,7 +15,6 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
 
 fun main(args: Array<String>) {
 
@@ -29,7 +27,6 @@ fun main(args: Array<String>) {
                 modules(
                     module {
                         single { config }
-                        single<DynamoDbEnhancedAsyncClient> { DynamoClientFactory.get() }
                         single { PrometheusMeterRegistry(PrometheusConfig.DEFAULT) }
                     },
                     ApiInjection.koinBeans,

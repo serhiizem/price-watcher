@@ -29,6 +29,8 @@ object Dependencies {
     const val ktorContentNegotiation = "io.ktor:ktor-server-content-negotiation:${Versions.ktorVersion}"
     const val ktorSerialization = "io.ktor:ktor-serialization-gson:${Versions.ktorVersion}"
     const val ktorMetricsMicrometer = "io.ktor:ktor-server-metrics-micrometer:${Versions.ktorVersion}"
+    const val ktorClientCore = "io.ktor:ktor-client-core:${Versions.ktorVersion}"
+    const val ktorClientEngine = "io.ktor:ktor-client-cio:${Versions.ktorVersion}"
 
     const val koin = "io.insert-koin:koin-ktor:${Versions.koinKtorVersion}"
     const val telegramApi = "io.github.kotlin-telegram-bot.kotlin-telegram-bot:telegram:${Versions.telegramApiVersion}"

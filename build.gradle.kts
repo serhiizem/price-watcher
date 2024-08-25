@@ -32,6 +32,8 @@ dependencies {
     implementation(Dependencies.ktorLogging)
     implementation(Dependencies.ktorStatusPages)
     implementation(Dependencies.ktorMetricsMicrometer)
+    implementation(Dependencies.ktorClientCore)
+    implementation(Dependencies.ktorClientEngine)
     implementation(Dependencies.koin)
     implementation(Dependencies.telegramApi)
 

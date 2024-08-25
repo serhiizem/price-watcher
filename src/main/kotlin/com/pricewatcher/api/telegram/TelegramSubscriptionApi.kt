@@ -29,7 +29,12 @@ object TelegramSubscriptionApi : PriceSubscriptionApi, KoinComponent {
                         val chatId = message.chat.id
                         val assetPriceSubscription = message.toAssetPriceSubscription()
                         subscriptionsDao.save(assetPriceSubscription)
-                        bot.sendMessage(chatId = ChatId.fromId(chatId), text = "subscribed to $assetPriceSubscription")
+                        bot.sendMessage(
+                            chatId = ChatId.fromId(chatId),
+                            text = "You will be notified when price of ${assetPriceSubscription.symbol} " +
+                                    "crosses ${assetPriceSubscription.priceCondition.toString().lowercase()} " +
+                                    assetPriceSubscription.price.toPlainString()
+                        )
                     }
                 }
             }

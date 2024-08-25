@@ -6,6 +6,7 @@ class Config(
     val host: String,
     val port: Int,
     val botApiKey: String,
+    val quoteApiKey: String,
     val awsCredentials: AwsBasicCredentials,
     val dynamoDbEndpoint: String
 ) {

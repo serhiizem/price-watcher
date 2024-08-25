@@ -50,6 +50,7 @@ fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
     val dotenv = dotenv()
     val environment = dotenv["ENVIRONMENT"] ?: handleDefaultEnvironment()
     val botApiKey = dotenv["TELEGRAM_API_KEY"]
+    val quoteApiKey = dotenv["QUOTE_API_KEY"]
     val awsCredentials = AwsBasicCredentials.create(dotenv["AWS_ACCESS_KEY"], dotenv["AWS_SECRET_ACCESS_KEY"])
     val dynamoDbEndpoint = dotenv["DYNAMO_DB_ENDPOINT"]
 
@@ -57,7 +58,7 @@ fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
     val host = hoconEnvironment.property("host").getString()
     val port = Integer.parseInt(hoconEnvironment.property("port").getString())
 
-    return Config(host, port, botApiKey, awsCredentials, dynamoDbEndpoint)
+    return Config(host, port, botApiKey, quoteApiKey, awsCredentials, dynamoDbEndpoint)
 }
 
 fun handleDefaultEnvironment(): String {

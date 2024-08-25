@@ -1,7 +1,8 @@
 package com.pricewatcher.persistence.dao
 
+import com.pricewatcher.config.Config
 import com.pricewatcher.domain.AssetPriceSubscription
-import com.pricewatcher.persistence.PersistenceClientProvider
+import com.pricewatcher.persistence.ddl.TableCreator
 import com.pricewatcher.persistence.entities.SubscriptionEntity
 import com.pricewatcher.persistence.entities.toEntity
 import org.koin.core.component.KoinComponent
@@ -15,9 +16,19 @@ private const val TABLE_NAME = "Subscriptions"
 
 object SubscriptionsTable : SubscriptionsDao, KoinComponent {
 
-    private val dynamoDbClient by inject<PersistenceClientProvider<DynamoDbEnhancedAsyncClient>>()
+    private val config by inject<Config>()
+    private val asyncClient by inject<DynamoDbEnhancedAsyncClient>()
 
-    private val table: DynamoDbAsyncTable<SubscriptionEntity> = dynamoDbClient.get()
+    init {
+        if (config.createTables()) {
+            val tableCreator = TableCreator(
+                TABLE_NAME, asyncClient, SubscriptionEntity::class.java
+            )
+            tableCreator.execute()
+        }
+    }
+
+    private val table: DynamoDbAsyncTable<SubscriptionEntity> = asyncClient
         .table(TABLE_NAME, TableSchema.fromBean(SubscriptionEntity::class.java))
 
     override fun save(subscription: AssetPriceSubscription) {

@@ -3,8 +3,7 @@ package com.pricewatcher
 import com.pricewatcher.api.injection.ApiInjection
 import com.pricewatcher.config.Config
 import com.pricewatcher.modules.injection.ModulesInjection
-import com.pricewatcher.persistence.DynamoClientProvider
-import com.pricewatcher.persistence.PersistenceClientProvider
+import com.pricewatcher.persistence.DynamoClientFactory
 import com.pricewatcher.persistence.injection.DaoInjection
 import com.typesafe.config.ConfigFactory
 import io.github.cdimascio.dotenv.dotenv
@@ -30,7 +29,7 @@ fun main(args: Array<String>) {
                 modules(
                     module {
                         single { config }
-                        single<PersistenceClientProvider<DynamoDbEnhancedAsyncClient>> { DynamoClientProvider }
+                        single<DynamoDbEnhancedAsyncClient> { DynamoClientFactory.get() }
                         single { PrometheusMeterRegistry(PrometheusConfig.DEFAULT) }
                     },
                     ApiInjection.koinBeans,
@@ -58,7 +57,7 @@ fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
     val host = hoconEnvironment.property("host").getString()
     val port = Integer.parseInt(hoconEnvironment.property("port").getString())
 
-    return Config(environment, host, port, botApiKey, awsCredentials, dynamoDbEndpoint)
+    return Config(host, port, botApiKey, awsCredentials, dynamoDbEndpoint)
 }
 
 fun handleDefaultEnvironment(): String {

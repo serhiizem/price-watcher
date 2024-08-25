@@ -22,6 +22,7 @@ class TableCreator<T>(
     fun execute() {
         val table: DynamoDbAsyncTable<out T> =
             client.table(tableName, TableSchema.fromBean(entityClass))
+        log.info("Creating table $tableName")
         table.createTable(createEnhancedRequest())
             .thenAccept {
                 log.info("Table $tableName created")

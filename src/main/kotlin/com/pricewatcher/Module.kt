@@ -1,7 +1,6 @@
 package com.pricewatcher
 
 import com.pricewatcher.modules.metrics.metrics
-import com.pricewatcher.persistence.PersistenceClientProvider
 import io.ktor.http.*
 import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
@@ -21,14 +20,10 @@ import io.micrometer.core.instrument.binder.system.UptimeMetrics
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedAsyncClient
 
 fun Application.module() {
 
     val prometheusRegistry by inject<PrometheusMeterRegistry>()
-    val dynamoDbClient by inject<PersistenceClientProvider<DynamoDbEnhancedAsyncClient>>()
-
-    dynamoDbClient.init()
 
     install(MicrometerMetrics) {
         registry = prometheusRegistry

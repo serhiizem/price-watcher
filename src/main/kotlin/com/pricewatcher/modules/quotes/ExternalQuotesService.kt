@@ -1,6 +1,7 @@
 package com.pricewatcher.modules.quotes
 
 import com.pricewatcher.domain.SimpleQuote
+import com.pricewatcher.modules.FIN_MODEL_HTTP_CLIENT
 import com.pricewatcher.util.LoggerFactory
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -13,7 +14,7 @@ import org.koin.core.qualifier.named
 object ExternalQuotesService : QuotesService, KoinComponent {
 
     private val log = LoggerFactory.getLogger(this)
-    private val httpClient by inject<HttpClient>(qualifier = named("finDataHttpClient"))
+    private val httpClient by inject<HttpClient>(qualifier = named(FIN_MODEL_HTTP_CLIENT))
 
     override suspend fun getQuotes(symbols: List<String>): List<SimpleQuote> {
         log.info("Requesting quotes for symbols: $symbols")

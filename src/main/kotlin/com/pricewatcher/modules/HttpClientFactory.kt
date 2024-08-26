@@ -10,11 +10,13 @@ import io.ktor.serialization.kotlinx.json.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+const val FIN_MODEL_HTTP_CLIENT = "finModelHttpClient"
+
 object HttpClientFactory : KoinComponent {
 
     private val config by inject<Config>()
 
-    private val finDataClient = HttpClient(CIO) {
+    private val finModelClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json()
         }
@@ -28,5 +30,5 @@ object HttpClientFactory : KoinComponent {
         }
     }
 
-    fun finDataClient() = finDataClient
+    fun finModelClient() = finModelClient
 }

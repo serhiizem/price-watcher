@@ -7,12 +7,10 @@ class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    new AwsProvider(this, "AWS", {
-      region: "us-west-1",
-    });
+    new AwsProvider(this, "AWS");
 
     const ec2Instance = new Instance(this, "compute", {
-      ami: "ami-01456a894f71116f2",
+      ami: "ami-066784287e358dad1",
       instanceType: "t2.micro",
     });
 

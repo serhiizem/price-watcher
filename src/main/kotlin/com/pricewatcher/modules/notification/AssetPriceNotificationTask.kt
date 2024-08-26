@@ -3,12 +3,11 @@ package com.pricewatcher.modules.notification
 import com.pricewatcher.api.PriceSubscriptionApi
 import com.pricewatcher.modules.quotes.QuotesService
 import com.pricewatcher.persistence.dao.SubscriptionsDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.math.BigDecimal
+import kotlin.time.Duration.Companion.minutes
 
 object AssetPriceNotificationTask : NotificationTask, KoinComponent {
 
@@ -20,13 +19,31 @@ object AssetPriceNotificationTask : NotificationTask, KoinComponent {
 
     init {
         scope.launch {
-            val existingSubscriptions = subscriptionsDao.findAll()
-            val trackedSymbols = existingSubscriptions.map { it.symbol }
-            val quotes = quotesService.getQuotes(trackedSymbols)
+            while (isActive) {
+                notifyOnMatchingConditions()
+                delay(10.minutes)
+            }
+        }
+    }
 
-            existingSubscriptions.forEach { subscription ->
-                val message = "You are subscribed to ${subscription.symbol}. Quotes: $quotes"
-                priceSubscriptionApi.sendMessageTo(message, subscription.originatingSource)
+    private suspend fun notifyOnMatchingConditions() {
+        val existingSubscriptions = subscriptionsDao.findAll()
+        val trackedSymbols = existingSubscriptions.map { it.symbol }
+        val quotes = quotesService.getQuotes(trackedSymbols)
+
+        existingSubscriptions.forEach { subscription ->
+            quotes.find {
+                it.symbol == subscription.symbol
+            }?.let {
+                val actualAssetPrice: BigDecimal = it.price.toBigDecimal()
+                val targetAssetPrice: BigDecimal = subscription.price
+                val priceCondition = subscription.priceCondition
+
+                if (priceCondition.hasMatch(actualAssetPrice, targetAssetPrice)) {
+                    val message = "Price of ${it.symbol} is $actualAssetPrice " +
+                            "(${priceCondition.prettyString()} the requested target price $targetAssetPrice)"
+                    priceSubscriptionApi.sendMessageTo(message, subscription.originatingSource)
+                }
             }
         }
     }

@@ -35,7 +35,7 @@ object TelegramSubscriptionApi : PriceSubscriptionApi, KoinComponent {
                         bot.sendMessage(
                             chatId = ChatId.fromId(chatId),
                             text = "You will be notified when price of ${assetPriceSubscription.symbol} " +
-                                    "crosses ${assetPriceSubscription.priceCondition.toString().lowercase()} " +
+                                    "crosses ${assetPriceSubscription.priceCondition.prettyString()} " +
                                     assetPriceSubscription.price.toPlainString()
                         )
                     }

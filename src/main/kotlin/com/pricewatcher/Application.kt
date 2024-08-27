@@ -44,7 +44,7 @@ fun Application.main() {
 }
 
 fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
-    val dotenv = dotenv()
+    val dotenv = dotenv { ignoreIfMissing = true }
     val environment = dotenv["ENVIRONMENT"] ?: handleDefaultEnvironment()
     val botApiKey = dotenv["TELEGRAM_API_KEY"]
     val quoteApiKey = dotenv["QUOTE_API_KEY"]

@@ -1,3 +1,5 @@
+import io.ktor.plugin.features.*
+
 group = AppConfig.group
 version = AppConfig.versionName
 
@@ -14,7 +16,21 @@ application {
 
 ktor {
     fatJar {
-        archiveFileName.set("pricewatcher.jar")
+        archiveFileName.set("${AppConfig.applicationId}.jar")
+    }
+    docker {
+        jreVersion = JreVersion.JRE_17
+        localImageName = AppConfig.applicationId
+        imageTag = AppConfig.versionName
+        portMappings = listOf(
+            DockerPortMapping(3500, 3500, DockerPortMappingProtocol.TCP))
+        externalRegistry = (
+            DockerImageRegistry.dockerHub(
+                appName = provider { AppConfig.applicationId },
+                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
+            )
+        )
     }
 }
 

@@ -13,4 +13,4 @@ tar xvfz node_exporter-1.0.0.linux-amd64.tar.gz
 cd node_exporter-1.0.0.linux-amd64/
 ./node_exporter
 
-curl -o docker-compose.yml  https://bitbucket.org/serhiizem/price-watcher/raw/a17e2d96cf14ce841af405af267102712e71825a/docker-compose.yml
+curl -o docker-compose.yml  https://bitbucket.org/serhiizem/price-watcher/raw/d329e1777c0a6d437745ebf3c64f98dec231a022/docker-compose.yml

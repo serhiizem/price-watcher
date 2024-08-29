@@ -49,7 +49,7 @@ fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
     val botApiKey = dotenv["TELEGRAM_API_KEY"]
     val quoteApiKey = dotenv["QUOTE_API_KEY"]
     val awsCredentials = AwsBasicCredentials.create(dotenv["AWS_ACCESS_KEY"], dotenv["AWS_SECRET_ACCESS_KEY"])
-    val dynamoDbEndpoint = dotenv["DYNAMO_DB_ENDPOINT"]
+    val dynamoDbEndpoint = dotenv["DYNAMO_ENDPOINT"]
 
     val hoconEnvironment = hoconConfig.config("ktor.deployment.$environment")
     val host = hoconEnvironment.property("host").getString()

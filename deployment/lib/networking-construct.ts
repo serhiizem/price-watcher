@@ -1,19 +1,15 @@
 import {Construct} from "constructs";
 import {IpAddresses, IVpc, SubnetType, Vpc} from "aws-cdk-lib/aws-ec2";
 
-type NetworkingProps = {
-    maxAzs: number;
-};
-
 export class NetworkingConstruct extends Construct {
     public readonly vpc: IVpc;
 
-    constructor(scope: Construct, id: string, props: NetworkingProps) {
+    constructor(scope: Construct, id: string) {
         super(scope, id);
 
         this.vpc = new Vpc(this, "DeploymentVPC", {
             ipAddresses: IpAddresses.cidr("10.0.0.0/16"),
-            maxAzs: props.maxAzs,
+            maxAzs: 1,
             subnetConfiguration: [
                 {
                     subnetType: SubnetType.PUBLIC,

@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:2.4.0
+    command: "-jar DynamoDBLocal.jar -sharedDb"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -v http://dynamodb:8000" ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
+    ports:
+      - "8000:8000"
+    restart: always
+  pricewatcher:
+    image: serjayzem/pricewatcher
+    env_file:
+      - ".env"
+    ports:
+      - "3500:3500"
+    depends_on:
+      - dynamodb

@@ -17,6 +17,10 @@ object ExternalQuotesService : QuotesService, KoinComponent {
     private val httpClient by inject<HttpClient>(qualifier = named(FIN_MODEL_HTTP_CLIENT))
 
     override suspend fun getQuotes(symbols: List<String>): List<SimpleQuote> {
+        if (symbols.isEmpty()) {
+            log.info("Received empty list of symbols, no quotes will be requested")
+            return emptyList()
+        }
         log.info("Requesting quotes for symbols: $symbols")
         val requestedSymbols = symbols.joinToString(",")
         val response = httpClient.get("quote-short/$requestedSymbols")

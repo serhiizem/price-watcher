@@ -55,7 +55,7 @@ fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
     val host = hoconEnvironment.property("host").getString()
     val port = Integer.parseInt(hoconEnvironment.property("port").getString())
 
-    return Config(host, port, botApiKey, quoteApiKey, awsCredentials, dynamoDbEndpoint)
+    return Config(environment, host, port, botApiKey, quoteApiKey, awsCredentials, dynamoDbEndpoint)
 }
 
 fun handleDefaultEnvironment(): String {

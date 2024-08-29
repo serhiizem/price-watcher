@@ -3,6 +3,7 @@ package com.pricewatcher.config
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 
 class Config(
+    private val environment: String,
     val host: String,
     val port: Int,
     val botApiKey: String,
@@ -11,5 +12,5 @@ class Config(
     val dynamoDbEndpoint: String
 ) {
 
-    fun createTables(): Boolean = false
+    fun createTables(): Boolean = "DEV".equals(environment, ignoreCase = true)
 }

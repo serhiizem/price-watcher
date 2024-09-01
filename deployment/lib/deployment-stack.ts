@@ -2,11 +2,11 @@ import {Construct} from 'constructs';
 import {InstanceConstruct} from "./instance-construct";
 import {NetworkingConstruct} from "./networking-construct";
 import {Stack, StackProps, Tags} from 'aws-cdk-lib';
-import {InstanceClass, InstanceSize, InstanceType, IVpc, MachineImage} from "aws-cdk-lib/aws-ec2";
+import {InstanceClass, InstanceSize, InstanceType, MachineImage, OperatingSystemType} from "aws-cdk-lib/aws-ec2";
 import {readScript} from "./utils/fileUtils";
 
 type DeploymentStackProps = StackProps & {
-    env: "app" | "cicd"
+    type: "app" | "cicd"
 }
 
 export class DeploymentStack extends Stack {
@@ -20,7 +20,8 @@ export class DeploymentStack extends Stack {
     private createInstance(props: DeploymentStackProps) {
         const networkingConstruct = new NetworkingConstruct(this, "NetworkingConstruct");
 
-        if ("app" === props.env) {
+        const deploymentType = props.type;
+        if ("app" === deploymentType) {
             return new InstanceConstruct(
                 this,
                 "AppInstanceConstruct",
@@ -31,6 +32,23 @@ export class DeploymentStack extends Stack {
                     vpc: networkingConstruct.vpc,
                     exposedPorts: [22, 3500, 9100],
                     setupScript: readScript("aws-linux-instance-setup.sh")
+                }
+            );
+        }
+        if ("cicd" === deploymentType) {
+            return new InstanceConstruct(
+                this,
+                "JenkinsInstanceConstruct",
+                {
+                    instanceName: "JenkinsEc2Instance",
+                    instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
+                    ami: MachineImage.fromSsmParameter(
+                        '/aws/service/canonical/ubuntu/server/focal/stable/current/amd64/hvm/ebs-gp2/ami-id',
+                        {os: OperatingSystemType.LINUX},
+                    ),
+                    vpc: networkingConstruct.vpc,
+                    exposedPorts: [22, 8080, 9000],
+                    setupScript: readScript("ubuntu-jenkins-instance-setup.sh")
                 }
             );
         }

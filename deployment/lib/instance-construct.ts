@@ -10,20 +10,20 @@ type DeploymentInstanceProps = {
     ami: IMachineImage;
     vpc: IVpc;
     exposedPorts: number[];
-    setupScript: string;
+    setupScripts: string[];
 };
 
 export class InstanceConstruct extends Construct {
     constructor(scope: Construct, id: string, props: DeploymentInstanceProps) {
         super(scope, id);
 
-        const {instanceName, instanceType, ami, vpc, exposedPorts, setupScript} = props;
+        const {instanceName, instanceType, ami, vpc, exposedPorts, setupScripts} = props;
         const subnets = vpc.selectSubnets({subnetGroupName: "Public"});
         const role = this.createRole();
         const securityGroup = this.createSecurityGroup(instanceName, vpc, exposedPorts);
         const instance = this.createInstance(instanceName, vpc, subnets, role, securityGroup, instanceType, ami);
 
-        instance.addUserData(setupScript);
+        setupScripts.forEach(script => instance.addUserData(script));
 
         new CfnOutput(this, `${instanceName}Ip`, {
             value: `http://${instance.instancePublicDnsName}/`,

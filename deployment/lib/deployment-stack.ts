@@ -31,7 +31,7 @@ export class DeploymentStack extends Stack {
                     ami: MachineImage.latestAmazonLinux2(),
                     vpc: networkingConstruct.vpc,
                     exposedPorts: [22, 3500, 9100],
-                    setupScript: readScript("aws-linux-instance-setup.sh")
+                    setupScripts: [readScript("aws-linux-instance-setup.sh")]
                 }
             );
         }
@@ -48,7 +48,7 @@ export class DeploymentStack extends Stack {
                     ),
                     vpc: networkingConstruct.vpc,
                     exposedPorts: [22, 8080, 9000],
-                    setupScript: readScript("ubuntu-jenkins-instance-setup.sh")
+                    setupScripts: [readScript("ubuntu-jenkins-instance-setup.sh")]
                 }
             );
         }

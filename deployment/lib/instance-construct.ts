@@ -1,5 +1,5 @@
 import {Construct} from "constructs";
-import {IMachineImage, Instance, InstanceType, IVpc, Peer, Port, SecurityGroup,} from "aws-cdk-lib/aws-ec2";
+import {IMachineImage, Instance, InstanceType, IVpc, Peer, Port, SecurityGroup, SubnetType,} from "aws-cdk-lib/aws-ec2";
 import {CfnOutput} from "aws-cdk-lib";
 import {ManagedPolicy, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 import {SubnetSelection} from "aws-cdk-lib/aws-ec2/lib/vpc";
@@ -9,6 +9,7 @@ type DeploymentInstanceProps = {
     instanceType: InstanceType;
     ami: IMachineImage;
     vpc: IVpc;
+    subnetType: SubnetType;
     exposedPorts: number[];
     setupScripts: string[];
 };
@@ -17,8 +18,8 @@ export class InstanceConstruct extends Construct {
     constructor(scope: Construct, id: string, props: DeploymentInstanceProps) {
         super(scope, id);
 
-        const {instanceName, instanceType, ami, vpc, exposedPorts, setupScripts} = props;
-        const subnets = vpc.selectSubnets({subnetGroupName: "Public"});
+        const {instanceName, instanceType, ami, vpc, subnetType, exposedPorts, setupScripts} = props;
+        const subnets = vpc.selectSubnets({subnetType});
         const role = this.createRole();
         const securityGroup = this.createSecurityGroup(instanceName, vpc, exposedPorts);
         const instance = this.createInstance(instanceName, vpc, subnets, role, securityGroup, instanceType, ami);

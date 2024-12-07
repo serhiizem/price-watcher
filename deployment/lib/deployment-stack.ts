@@ -2,7 +2,14 @@ import {Construct} from 'constructs';
 import {InstanceConstruct} from "./instance-construct";
 import {NetworkingConstruct} from "./networking-construct";
 import {Stack, StackProps, Tags} from 'aws-cdk-lib';
-import {InstanceClass, InstanceSize, InstanceType, MachineImage, OperatingSystemType} from "aws-cdk-lib/aws-ec2";
+import {
+    InstanceClass,
+    InstanceSize,
+    InstanceType,
+    MachineImage,
+    OperatingSystemType,
+    SubnetType
+} from "aws-cdk-lib/aws-ec2";
 import {readScript} from "./utils/fileUtils";
 
 type DeploymentStackProps = StackProps & {
@@ -30,6 +37,7 @@ export class DeploymentStack extends Stack {
                     instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
                     ami: MachineImage.latestAmazonLinux2(),
                     vpc: networkingConstruct.vpc,
+                    subnetType: SubnetType.PUBLIC,
                     exposedPorts: [22, 3500, 9100],
                     setupScripts: [readScript("aws-linux-instance-setup.sh")]
                 }
@@ -47,6 +55,7 @@ export class DeploymentStack extends Stack {
                         {os: OperatingSystemType.LINUX},
                     ),
                     vpc: networkingConstruct.vpc,
+                    subnetType: SubnetType.PUBLIC,
                     exposedPorts: [22, 8080, 9000],
                     setupScripts: [readScript("ubuntu-jenkins-instance-setup.sh")]
                 }

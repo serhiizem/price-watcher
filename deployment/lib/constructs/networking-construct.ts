@@ -9,19 +9,19 @@ export class NetworkingConstruct extends Construct {
 
         this.vpc = new Vpc(this, "DeploymentVPC", {
             ipAddresses: IpAddresses.cidr("10.0.0.0/16"),
-            maxAzs: 1,
+            maxAzs: 2,
             subnetConfiguration: [
                 {
                     subnetType: SubnetType.PUBLIC,
-                    name: "Public",
-                    cidrMask: 24,
+                    name: "PublicSubnet",
+                    cidrMask: 24
                 },
                 {
-                    cidrMask: 24,
-                    name: "Private",
-                    subnetType: SubnetType.PRIVATE_ISOLATED,
-                },
-            ],
+                    subnetType: SubnetType.PRIVATE_WITH_EGRESS,
+                    name: "PrivateSubnet",
+                    cidrMask: 24
+                }
+            ]
         });
     }
 }

@@ -28,7 +28,7 @@ export class InstanceConstruct extends Construct {
 
         new CfnOutput(this, `${instanceName}Ip`, {
             value: `http://${instance.instancePublicDnsName}/`,
-            exportName: `${instanceName}Host`,
+            exportName: `${instanceName}Host`
         });
     }
 
@@ -37,14 +37,14 @@ export class InstanceConstruct extends Construct {
             assumedBy: new ServicePrincipal("ec2.amazonaws.com"),
             managedPolicies: [
                 ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMFullAccess"),
-            ],
+            ]
         });
     }
 
     private createSecurityGroup(instanceName: string, vpc: IVpc, exposedPorts: number[]): SecurityGroup {
         const securityGroup = new SecurityGroup(this, `${instanceName}Sg`, {
             vpc,
-            allowAllOutbound: true,
+            allowAllOutbound: true
         });
 
         exposedPorts.forEach((port) =>
@@ -71,7 +71,7 @@ export class InstanceConstruct extends Construct {
             securityGroup,
             instanceType,
             keyName,
-            machineImage,
+            machineImage
         });
     }
 }

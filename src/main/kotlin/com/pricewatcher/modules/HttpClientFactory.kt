@@ -16,7 +16,7 @@ object HttpClientFactory : KoinComponent {
 
     private val config by inject<Config>()
 
-    private val finModelClient = HttpClient(CIO) {
+    fun finModelClient(): HttpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             json()
         }
@@ -29,6 +29,4 @@ object HttpClientFactory : KoinComponent {
             }
         }
     }
-
-    fun finModelClient() = finModelClient
 }

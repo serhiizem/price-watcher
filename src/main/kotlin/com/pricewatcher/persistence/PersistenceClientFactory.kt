@@ -13,7 +13,7 @@ object PersistenceClientFactory : KoinComponent {
 
     private val config by inject<Config>()
 
-    private var asyncClient = DynamoDbEnhancedAsyncClient.builder()
+    fun dynamoDbClient(): DynamoDbEnhancedAsyncClient = DynamoDbEnhancedAsyncClient.builder()
         .dynamoDbClient(
             DynamoDbAsyncClient.builder()
                 .region(Region.US_EAST_1)
@@ -22,6 +22,4 @@ object PersistenceClientFactory : KoinComponent {
                 .build()
         )
         .build()
-
-    fun dynamoDbClient(): DynamoDbEnhancedAsyncClient = asyncClient
 }

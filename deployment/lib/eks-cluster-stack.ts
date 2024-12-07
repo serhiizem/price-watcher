@@ -1,20 +1,9 @@
-import {Stack, StackProps, Tags} from "aws-cdk-lib";
-import {
-    InstanceClass,
-    InstanceSize,
-    InstanceType,
-    IpAddresses,
-    MachineImage,
-    OperatingSystemType,
-    SubnetType,
-    Vpc
-} from "aws-cdk-lib/aws-ec2";
-import {Cluster, IpFamily, KubernetesVersion, NodegroupAmiType} from "aws-cdk-lib/aws-eks";
+import {Duration, Stack, StackProps} from "aws-cdk-lib";
+import {InstanceClass, InstanceSize, InstanceType, IpAddresses, SubnetType, Vpc} from "aws-cdk-lib/aws-ec2";
+import {Cluster, KubernetesVersion, NodegroupAmiType} from "aws-cdk-lib/aws-eks";
 import {KubectlV29Layer} from "@aws-cdk/lambda-layer-kubectl-v29";
 import {ManagedPolicy, Role, ServicePrincipal, User} from "aws-cdk-lib/aws-iam";
 import {Construct} from "constructs";
-import {InstanceConstruct} from "./instance-construct";
-import {readScript} from "./utils/fileUtils";
 
 export class EKSClusterStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
@@ -60,15 +49,12 @@ export class EKSClusterStack extends Stack {
             vpc,
             defaultCapacity: 0,
             version: KubernetesVersion.V1_30,
-            kubectlLayer: new KubectlV29Layer(this, "kubectl"),
-            ipFamily: IpFamily.IP_V4,
-            outputClusterName: true,
-            outputConfigCommand: true
+            kubectlLayer: new KubectlV29Layer(this, "kubectl")
         });
 
         eksCluster.addNodegroupCapacity("EksNodeGroup", {
             amiType: NodegroupAmiType.AL2_X86_64,
-            instanceTypes: [InstanceType.of(InstanceClass.T2, InstanceSize.MICRO)],
+            instanceTypes: [InstanceType.of(InstanceClass.T2, InstanceSize.MEDIUM)],
             desiredSize: 1,
             diskSize: 20,
             nodeRole: new Role(this, "EksClusterNodeGroupRole", {
@@ -82,23 +68,39 @@ export class EKSClusterStack extends Stack {
             })
         });
 
-        eksCluster.addManifest("ArgocdNamespace", {
-            apiVersion: "v1",
-            kind: "Namespace",
-            metadata: {name: "argocd"}
-        });
-
-        // eksCluster.addHelmChart("argocd", {
-        //     chart: "argo-cd",
-        //     namespace: "argocd",
-        //     version: "7.7.7",
-        //     repository: "https://argoproj.github.io/argo-helm"
-        // });
-
         const user = User.fromUserName(this, "CliUser", "serhiizem.cli");
         eksCluster.awsAuth.addUserMapping(user, {
-          groups: ["system:masters"],
-          username: "serhiizem.cli",
+            groups: ["system:masters"],
+            username: "serhiizem.cli",
         });
+
+        const argocdNamespace = eksCluster.addManifest('argocd-namespace', {
+            apiVersion: 'v1',
+            kind: 'Namespace',
+            metadata: {
+                name: 'argocd',
+            },
+        });
+
+        const argocdIngress = eksCluster.addHelmChart('argocd-ingress', {
+            chart: 'argo-cd',
+            repository: 'https://argoproj.github.io/argo-helm',
+            namespace: 'argocd',
+            wait: true,
+            release: 'argo-cd',
+            version: '7.7.7',
+            createNamespace: false,
+            timeout: Duration.minutes(15),
+            values: {
+                server: {
+                    service: {
+                        type: 'LoadBalancer'
+                    }
+                }
+            }
+        });
+
+        // make sure namespace is deployed before the chart
+        argocdIngress.node.addDependency(argocdNamespace);
     }
 }

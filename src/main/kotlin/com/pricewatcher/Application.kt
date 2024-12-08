@@ -14,7 +14,6 @@ import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 
 fun main(args: Array<String>) {
 
@@ -48,14 +47,17 @@ fun extractConfig(hoconConfig: HoconApplicationConfig): Config {
     val environment = dotenv["ENVIRONMENT"] ?: handleDefaultEnvironment()
     val botApiKey = dotenv["TELEGRAM_API_KEY"]
     val quoteApiKey = dotenv["QUOTE_API_KEY"]
-    val awsCredentials = AwsBasicCredentials.create(dotenv["AWS_ACCESS_KEY"], dotenv["AWS_SECRET_ACCESS_KEY"])
+    val accessKey = dotenv["AWS_ACCESS_KEY"]
+    val secretAccessKey = dotenv["AWS_SECRET_ACCESS_KEY"]
     val dynamoDbEndpoint = dotenv["DYNAMO_ENDPOINT"]
 
     val hoconEnvironment = hoconConfig.config("ktor.deployment.$environment")
     val host = hoconEnvironment.property("host").getString()
     val port = Integer.parseInt(hoconEnvironment.property("port").getString())
 
-    return Config(environment, host, port, botApiKey, quoteApiKey, awsCredentials, dynamoDbEndpoint)
+    return Config(
+        environment, host, port, botApiKey, quoteApiKey,
+        accessKey, secretAccessKey, dynamoDbEndpoint)
 }
 
 fun handleDefaultEnvironment(): String {

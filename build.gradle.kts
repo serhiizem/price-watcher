@@ -19,7 +19,7 @@ ktor {
         archiveFileName.set("${AppConfig.applicationId}.jar")
     }
     docker {
-        jreVersion = JreVersion.JRE_17
+        jreVersion = JavaVersion.VERSION_17
         localImageName = AppConfig.applicationId
         imageTag = AppConfig.versionName
         portMappings = listOf(

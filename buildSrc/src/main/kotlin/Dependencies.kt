@@ -3,14 +3,14 @@
 object Dependencies {
 
     object Versions {
-        const val shadowJarVersion = "5.0.0"
-        const val kotlinPluginVersion = "1.8.0"
-        const val kotlinPluginSerializationVersion = "2.0.0"
-        const val ktorPluginVersion = "2.2.3"
-        const val ktorVersion = "2.2.3"
-        const val koinKtorVersion = "3.3.1"
+        const val shadowJarVersion = "8.1.1"
+        const val kotlinPluginVersion = "2.1.0"
+        const val kotlinPluginSerializationVersion = "2.1.0"
+        const val ktorPluginVersion = "2.3.13"
+        const val ktorVersion = "2.3.13"
+        const val koinKtorVersion = "4.0.0"
 
-        const val koinVersion = "3.3.3"
+        const val koinVersion = "4.0.0"
         const val telegramApiVersion = "6.2.0"
 
         const val awsBomVersion = "2.27.11"

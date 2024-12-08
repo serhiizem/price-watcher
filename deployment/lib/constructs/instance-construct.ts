@@ -2,7 +2,8 @@ import {Construct} from "constructs";
 import {IMachineImage, Instance, InstanceType, IVpc, Peer, Port, SecurityGroup, SubnetType,} from "aws-cdk-lib/aws-ec2";
 import {CfnOutput} from "aws-cdk-lib";
 import {ManagedPolicy, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
-import {SubnetSelection} from "aws-cdk-lib/aws-ec2/lib/vpc";
+
+const keyName = "cdk-key-pair";
 
 type DeploymentInstanceProps = {
     instanceName: string;
@@ -15,21 +16,27 @@ type DeploymentInstanceProps = {
 };
 
 export class InstanceConstruct extends Construct {
+
+    public readonly instance: Instance;
+
     constructor(scope: Construct, id: string, props: DeploymentInstanceProps) {
         super(scope, id);
 
         const {instanceName, instanceType, ami, vpc, subnetType, exposedPorts, setupScripts} = props;
-        const subnets = vpc.selectSubnets({subnetType});
+        const vpcSubnets = vpc.selectSubnets({subnetType});
         const role = this.createRole();
         const securityGroup = this.createSecurityGroup(instanceName, vpc, exposedPorts);
-        const instance = this.createInstance(instanceName, vpc, subnets, role, securityGroup, instanceType, ami);
-
+        const instance = new Instance(this, instanceName, {
+            vpc, vpcSubnets, role, securityGroup, instanceType, keyName, machineImage: ami
+        });
         setupScripts.forEach(script => instance.addUserData(script));
 
         new CfnOutput(this, `${instanceName}Ip`, {
             value: `http://${instance.instancePublicDnsName}/`,
             exportName: `${instanceName}Host`
         });
+
+        this.instance = instance;
     }
 
     private createRole(): Role {
@@ -52,26 +59,5 @@ export class InstanceConstruct extends Construct {
         );
 
         return securityGroup;
-    }
-
-    private createInstance(
-        instanceName: string,
-        vpc: IVpc,
-        vpcSubnets: SubnetSelection,
-        role: Role,
-        securityGroup: SecurityGroup,
-        instanceType: InstanceType,
-        machineImage: IMachineImage
-    ): Instance {
-        const keyName = "cdk-key-pair";
-        return new Instance(this, instanceName, {
-            vpc,
-            vpcSubnets,
-            role,
-            securityGroup,
-            instanceType,
-            keyName,
-            machineImage
-        });
     }
 }

@@ -12,8 +12,11 @@ export class DeploymentStack extends Stack {
 
         const {vpc} = new NetworkingConstruct(this, "NetworkingConstruct");
         const k8s = new K8sConstruct(this, "K8sConstruct", {vpc});
-        new JenkinsConstruct(this, "JenkinsConstruct", {vpc});
 
-        new ArgoHelmConstruct(this, "ArgoHelmConstruct", {cluster: k8s.cluster});
+        const cluster = k8s.cluster;
+        const {instance} = new JenkinsConstruct(this, "JenkinsConstruct", {vpc});
+        cluster.awsAuth.addMastersRole(instance.role);
+
+        new ArgoHelmConstruct(this, "ArgoHelmConstruct", {cluster});
     }
 }

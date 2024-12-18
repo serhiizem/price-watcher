@@ -4,6 +4,9 @@ import {NetworkingConstruct} from "./constructs/networking-construct";
 import {K8sConstruct} from "./constructs/k8s-construct";
 import {ArgoHelmConstruct} from "./constructs/argo-helm-construct";
 import {JenkinsConstruct} from "./constructs/jenkins-construct";
+import {ClusterAuth} from "./access/cluster-auth";
+import {User} from "aws-cdk-lib/aws-iam";
+import {AppConfig} from "./config/app-config";
 
 export class DeploymentStack extends Stack {
 
@@ -11,11 +14,13 @@ export class DeploymentStack extends Stack {
         super(scope, id, props);
 
         const {vpc} = new NetworkingConstruct(this, "NetworkingConstruct");
-        const k8s = new K8sConstruct(this, "K8sConstruct", {vpc});
+        const {cluster} = new K8sConstruct(this, "K8sConstruct", {vpc});
+        const {instance: jenkins} = new JenkinsConstruct(this, "JenkinsConstruct", {vpc});
+        const deployer = User.fromUserName(this, "CdkUser", AppConfig.cdkUsername);
 
-        const cluster = k8s.cluster;
-        const {instance} = new JenkinsConstruct(this, "JenkinsConstruct", {vpc});
-        cluster.awsAuth.addMastersRole(instance.role);
+        ClusterAuth.of(cluster)
+            .allowAccessToInstance(jenkins)
+            .allowAccessToUser(deployer);
 
         new ArgoHelmConstruct(this, "ArgoHelmConstruct", {cluster});
     }

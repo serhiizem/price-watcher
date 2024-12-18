@@ -2,7 +2,7 @@ import {Construct} from "constructs";
 import {InstanceClass, InstanceSize, InstanceType, IVpc} from "aws-cdk-lib/aws-ec2";
 import {Cluster, KubernetesVersion, NodegroupAmiType} from "aws-cdk-lib/aws-eks";
 import {KubectlV29Layer} from "@aws-cdk/lambda-layer-kubectl-v29";
-import {ManagedPolicy, Role, ServicePrincipal, User} from "aws-cdk-lib/aws-iam";
+import {ManagedPolicy, Role, ServicePrincipal} from "aws-cdk-lib/aws-iam";
 
 interface ClusterConstructProps {
     vpc: IVpc;
@@ -22,11 +22,6 @@ export class K8sConstruct extends Construct {
             kubectlLayer: new KubectlV29Layer(this, "kubectl")
         });
 
-        this.addNodeGroupCapacity();
-        this.addRbacMapping();
-    }
-
-    private addNodeGroupCapacity() {
         this.cluster.addNodegroupCapacity("EksNodeGroup", {
             amiType: NodegroupAmiType.AL2_X86_64,
             instanceTypes: [InstanceType.of(InstanceClass.T2, InstanceSize.MEDIUM)],
@@ -41,14 +36,6 @@ export class K8sConstruct extends Construct {
                     ManagedPolicy.fromAwsManagedPolicyName("AmazonEKS_CNI_Policy")
                 ]
             })
-        });
-    }
-
-    private addRbacMapping() {
-        const user = User.fromUserName(this, "CliUser", "serhiizem.cli");
-        this.cluster.awsAuth.addUserMapping(user, {
-            groups: ["system:masters"],
-            username: "serhiizem.cli",
         });
     }
 }

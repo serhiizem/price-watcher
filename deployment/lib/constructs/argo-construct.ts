@@ -2,13 +2,13 @@ import {Construct} from "constructs";
 import {Cluster} from "aws-cdk-lib/aws-eks";
 import {Duration} from "aws-cdk-lib";
 
-interface ArgoHelmConstructProps {
+interface ArgoConstructProps {
     cluster: Cluster
 }
 
-export class ArgoHelmConstruct extends Construct {
+export class ArgoConstruct extends Construct {
 
-    constructor(scope: Construct, id: string, {cluster}: ArgoHelmConstructProps) {
+    constructor(scope: Construct, id: string, {cluster}: ArgoConstructProps) {
         super(scope, id);
 
         const argoNamespace = cluster.addManifest("argocd-namespace", {
@@ -23,8 +23,8 @@ export class ArgoHelmConstruct extends Construct {
             chart: "argo-cd",
             repository: "https://argoproj.github.io/argo-helm",
             namespace: "argocd",
-            wait: true,
             release: "argo-cd",
+            wait: true,
             version: "7.7.7",
             createNamespace: false,
             timeout: Duration.minutes(15),

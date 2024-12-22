@@ -2,11 +2,12 @@ import {Stack, StackProps} from "aws-cdk-lib";
 import {Construct} from "constructs";
 import {NetworkingConstruct} from "./constructs/networking-construct";
 import {K8sConstruct} from "./constructs/k8s-construct";
-import {ArgoHelmConstruct} from "./constructs/argo-helm-construct";
+import {ArgoConstruct} from "./constructs/argo-construct";
 import {JenkinsConstruct} from "./constructs/jenkins-construct";
 import {ClusterAuth} from "./access/cluster-auth";
 import {User} from "aws-cdk-lib/aws-iam";
 import {AppConfig} from "./config/app-config";
+import {MonitoringConstruct} from "./constructs/monitoring-construct";
 
 export class DeploymentStack extends Stack {
 
@@ -22,6 +23,7 @@ export class DeploymentStack extends Stack {
             .allowAccessToInstance(jenkins)
             .allowAccessToUser(deployer);
 
-        new ArgoHelmConstruct(this, "ArgoHelmConstruct", {cluster});
+        new ArgoConstruct(this, "ArgoHelmConstruct", {cluster});
+        new MonitoringConstruct(this, "MonitoringConstruct", {cluster});
     }
 }

@@ -25,7 +25,7 @@ export class K8sConstruct extends Construct {
         this.cluster.addNodegroupCapacity("EksNodeGroup", {
             amiType: NodegroupAmiType.AL2_X86_64,
             instanceTypes: [InstanceType.of(InstanceClass.T2, InstanceSize.MEDIUM)],
-            desiredSize: 1,
+            desiredSize: 3,
             diskSize: 20,
             nodeRole: new Role(this, "EksClusterNodeGroupRole", {
                 roleName: "EksClusterNodeGroupRole",

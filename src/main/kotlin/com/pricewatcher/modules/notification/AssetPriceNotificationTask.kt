@@ -43,7 +43,7 @@ object AssetPriceNotificationTask : NotificationTask, KoinComponent {
         }
     }
 
-    private suspend fun notifyOnMatchingConditions(quote: SimpleQuote, subscription: AssetPriceSubscription) {
+    private fun notifyOnMatchingConditions(quote: SimpleQuote, subscription: AssetPriceSubscription) {
         val actualAssetPrice: BigDecimal = quote.price.toBigDecimal()
         val targetAssetPrice: BigDecimal = subscription.price
         val priceCondition = subscription.priceCondition

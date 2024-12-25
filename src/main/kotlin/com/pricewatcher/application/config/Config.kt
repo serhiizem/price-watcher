@@ -1,5 +1,6 @@
 package com.pricewatcher.application.config
 
+import com.typesafe.config.ConfigFactory
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.config.*
 
@@ -12,7 +13,7 @@ data class Config(
     fun createTables(): Boolean = false
 
     companion object {
-        fun fromHocon(hoconConfig: HoconApplicationConfig): Config {
+        fun instance(): Config {
             val dotenv = dotenv { ignoreIfMissing = true }
             val environment = dotenv["ENVIRONMENT"] ?: handleDefaultEnvironment()
             val botApiKey = dotenv["TELEGRAM_API_KEY"]
@@ -21,6 +22,7 @@ data class Config(
             val secretAccessKey = dotenv["AWS_SECRET_ACCESS_KEY"]
             val dynamoDbEndpoint = dotenv["DYNAMO_ENDPOINT"]
 
+            val hoconConfig = HoconApplicationConfig(ConfigFactory.load())
             val hoconEnvironment = hoconConfig.config("ktor.deployment.$environment")
             val port = Integer.parseInt(hoconEnvironment.property("port").getString())
 

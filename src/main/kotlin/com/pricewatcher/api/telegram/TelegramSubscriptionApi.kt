@@ -6,7 +6,7 @@ import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.ChatId
 import com.pricewatcher.api.PriceSubscriptionApi
-import com.pricewatcher.config.Config
+import com.pricewatcher.application.config.Config
 import com.pricewatcher.extensions.toAssetPriceSubscription
 import com.pricewatcher.persistence.dao.SubscriptionsDao
 import com.pricewatcher.util.LoggerFactory

@@ -1,6 +1,6 @@
 package com.pricewatcher.persistence
 
-import com.pricewatcher.config.Config
+import com.pricewatcher.application.config.Config
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials

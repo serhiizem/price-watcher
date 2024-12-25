@@ -17,11 +17,11 @@ import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.FileDescriptorMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.core.instrument.binder.system.UptimeMetrics
-import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
 
-fun Application.module() {
+fun Application.plugins() {
 
     val prometheusRegistry by inject<PrometheusMeterRegistry>()
 

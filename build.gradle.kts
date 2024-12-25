@@ -5,9 +5,8 @@ version = AppConfig.versionName
 
 plugins {
     kotlin("jvm") version Dependencies.Versions.kotlinPluginVersion
-    id("io.ktor.plugin") version Dependencies.Versions.ktorPluginVersion
+    id("io.ktor.plugin") version Dependencies.Versions.ktorVersion
     kotlin("plugin.serialization") version Dependencies.Versions.kotlinPluginSerializationVersion
-    id("com.github.johnrengelman.shadow") version Dependencies.Versions.shadowJarVersion
 }
 
 application {
@@ -54,6 +53,7 @@ dependencies {
     implementation(Dependencies.ktorClientContentNegotiation)
     implementation(Dependencies.ktorSerializationJson)
     implementation(Dependencies.koin)
+    implementation(Dependencies.koinLogger)
     implementation(Dependencies.telegramApi)
 
     implementation(Dependencies.awsDynamoDb)

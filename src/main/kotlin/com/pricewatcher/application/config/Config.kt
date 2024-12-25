@@ -1,6 +1,6 @@
-package com.pricewatcher.config
+package com.pricewatcher.application.config
 
-class Config(
+data class Config(
     private val environment: String,
     val appPort: Int,
     val botApiKey: String,
@@ -10,5 +10,5 @@ class Config(
     val dynamoDbEndpoint: String
 ) {
 
-    fun createTables(): Boolean = "DEV".equals(environment, ignoreCase = true)
+    fun createTables(): Boolean = false
 }

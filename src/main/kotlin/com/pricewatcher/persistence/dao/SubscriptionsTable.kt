@@ -1,6 +1,6 @@
 package com.pricewatcher.persistence.dao
 
-import com.pricewatcher.config.Config
+import com.pricewatcher.application.config.Config
 import com.pricewatcher.domain.AssetPriceSubscription
 import com.pricewatcher.persistence.ddl.TableCreator
 import com.pricewatcher.persistence.entities.SubscriptionEntity

@@ -15,13 +15,14 @@ object PersistenceClientFactory : KoinComponent {
     private val config by inject<Config>()
 
     fun dynamoDbClient(): DynamoDbEnhancedAsyncClient {
-        val awsCredentials = AwsBasicCredentials.create(config.infraAccessKey, config.infraSecretKey)
+        val (infraAccessKey, infraSecretKey, dynamoDbEndpoint) = config.infra;
+        val awsCredentials = AwsBasicCredentials.create(infraAccessKey, infraSecretKey)
 
         return DynamoDbEnhancedAsyncClient.builder()
             .dynamoDbClient(
                 DynamoDbAsyncClient.builder()
                     .region(Region.US_EAST_1)
-                    .endpointOverride(URI.create(config.dynamoDbEndpoint))
+                    .endpointOverride(URI.create(dynamoDbEndpoint))
                     .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                     .build()
             )

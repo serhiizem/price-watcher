@@ -24,7 +24,7 @@ object TelegramSubscriptionApi : PriceSubscriptionApi, KoinComponent {
     init {
         log.info("Staring telegram subscription bot")
         bot = bot {
-            token = config.botApiKey
+            token = config.api.botApiKey
             dispatch {
                 text {
                     log.info("Received message: $text")

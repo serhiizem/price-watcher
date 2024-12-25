@@ -25,7 +25,7 @@ object HttpClientFactory : KoinComponent {
                 protocol = URLProtocol.HTTPS
                 host = "financialmodelingprep.com"
                 path("api/", "v3/")
-                parameters.append("apikey", config.quoteApiKey)
+                parameters.append("apikey", config.api.quoteApiKey)
             }
         }
     }

@@ -6,11 +6,8 @@ import io.ktor.server.config.*
 data class Config(
     private val environment: String,
     val appPort: Int,
-    val botApiKey: String,
-    val quoteApiKey: String,
-    val infraAccessKey: String,
-    val infraSecretKey: String,
-    val dynamoDbEndpoint: String
+    val api: ApiConfig,
+    val infra: InfraConfig
 ) {
     fun createTables(): Boolean = false
 
@@ -28,8 +25,9 @@ data class Config(
             val port = Integer.parseInt(hoconEnvironment.property("port").getString())
 
             return Config(
-                environment, port, botApiKey, quoteApiKey,
-                accessKey, secretAccessKey, dynamoDbEndpoint
+                environment, port,
+                ApiConfig(botApiKey, quoteApiKey),
+                InfraConfig(accessKey, secretAccessKey, dynamoDbEndpoint)
             )
         }
 

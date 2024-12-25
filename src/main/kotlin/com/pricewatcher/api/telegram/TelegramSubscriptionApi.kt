@@ -28,9 +28,8 @@ object TelegramSubscriptionApi : PriceSubscriptionApi, KoinComponent {
             token = config.api.botApiKey
             dispatch { text { onMessageReceived(text, message) } }
         }
-        bot.startPolling().apply {
-            log.info("Telegram subscription bot is polling for messages")
-        }
+        bot.startPolling()
+        log.info("Telegram subscription bot is polling for messages")
     }
 
     private fun onMessageReceived(text: String, message: Message) {

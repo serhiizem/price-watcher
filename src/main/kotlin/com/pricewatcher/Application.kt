@@ -26,12 +26,10 @@ fun main(args: Array<String>) {
 
     val config = koin.koin.get<Config>()
 
-    fun startServer() = embeddedServer(Netty, port = config.appPort) {
+    embeddedServer(Netty, port = config.appPort) {
         println("Launching application on port ${config.appPort}")
         configure()
     }.start(wait = true)
-
-    startServer()
 }
 
 fun Application.configure() {

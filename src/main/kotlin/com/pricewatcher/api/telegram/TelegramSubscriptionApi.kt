@@ -5,6 +5,7 @@ import com.github.kotlintelegrambot.bot
 import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.ChatId
+import com.github.kotlintelegrambot.entities.Message
 import com.pricewatcher.api.PriceSubscriptionApi
 import com.pricewatcher.application.config.Config
 import com.pricewatcher.extensions.toAssetPriceSubscription
@@ -25,25 +26,25 @@ object TelegramSubscriptionApi : PriceSubscriptionApi, KoinComponent {
         log.info("Staring telegram subscription bot")
         bot = bot {
             token = config.api.botApiKey
-            dispatch {
-                text {
-                    log.info("Received message: $text")
-                    if (text.startsWith("/notify")) {
-                        val chatId = message.chat.id
-                        val assetPriceSubscription = message.toAssetPriceSubscription()
-                        subscriptionsDao.save(assetPriceSubscription)
-                        bot.sendMessage(
-                            chatId = ChatId.fromId(chatId),
-                            text = "You will be notified when price of ${assetPriceSubscription.symbol} " +
-                                    "crosses ${assetPriceSubscription.priceCondition.prettyString()} " +
-                                    assetPriceSubscription.price.toPlainString()
-                        )
-                    }
-                }
-            }
+            dispatch { text { onMessageReceived(text, message) } }
         }
         bot.startPolling().apply {
             log.info("Telegram subscription bot is polling for messages")
+        }
+    }
+
+    private fun onMessageReceived(text: String, message: Message) {
+        log.info("Received message: $text")
+        if (text.startsWith("/notify")) {
+            val chatId = message.chat.id
+            val assetPriceSubscription = message.toAssetPriceSubscription()
+            subscriptionsDao.save(assetPriceSubscription)
+            bot.sendMessage(
+                chatId = ChatId.fromId(chatId),
+                text = "You will be notified when price of ${assetPriceSubscription.symbol} " +
+                        "crosses ${assetPriceSubscription.priceCondition.prettyString()} " +
+                        assetPriceSubscription.price.toPlainString()
+            )
         }
     }
 

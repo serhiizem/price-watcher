@@ -1,15 +1,8 @@
-package com.pricewatcher
+package com.pricewatcher.application.plugins
 
-import com.pricewatcher.modules.metrics.metrics
-import io.ktor.http.*
-import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.metrics.micrometer.*
 import io.ktor.server.plugins.callloging.*
-import io.ktor.server.plugins.contentnegotiation.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
@@ -21,7 +14,7 @@ import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import org.koin.ktor.ext.inject
 import org.slf4j.event.Level
 
-fun Application.plugins() {
+fun Application.configureMonitoring() {
 
     val prometheusRegistry by inject<PrometheusMeterRegistry>()
 
@@ -39,22 +32,5 @@ fun Application.plugins() {
     }
     install(CallLogging) {
         level = Level.DEBUG
-    }
-    install(ContentNegotiation) { gson { } }
-    install(StatusPages) {
-        exception<UnknownError> { call, _ ->
-            call.respondText(
-                "Internal server error",
-                ContentType.Text.Plain,
-                status = HttpStatusCode.InternalServerError
-            )
-        }
-        exception<IllegalArgumentException> { call, _ ->
-            call.respond(HttpStatusCode.BadRequest)
-        }
-    }
-
-    install(Routing) {
-        metrics()
     }
 }

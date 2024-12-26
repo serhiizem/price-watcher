@@ -3,6 +3,7 @@
 object Dependencies {
 
     object Versions {
+        const val releasePluginVersion = "3.1.0"
         const val kotlinPluginVersion = "2.1.0"
         const val kotlinPluginSerializationVersion = "2.1.0"
         const val ktorVersion = "2.3.13"

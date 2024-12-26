@@ -1,4 +1,6 @@
 import io.ktor.plugin.features.*
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val group: String by project
 val applicationId: String by project
@@ -8,7 +10,7 @@ plugins {
     kotlin("jvm") version Dependencies.Versions.kotlinPluginVersion
     id("io.ktor.plugin") version Dependencies.Versions.ktorVersion
     kotlin("plugin.serialization") version Dependencies.Versions.kotlinPluginSerializationVersion
-    id("net.researchgate.release") version "3.1.0"
+    id("net.researchgate.release") version Dependencies.Versions.releasePluginVersion
 }
 
 application {
@@ -24,14 +26,15 @@ ktor {
         localImageName = applicationId
         imageTag = version
         portMappings = listOf(
-            DockerPortMapping(3500, 3500, DockerPortMappingProtocol.TCP))
-        externalRegistry = (
-            DockerImageRegistry.dockerHub(
-                appName = provider { applicationId },
-                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
-                password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
-            )
+            DockerPortMapping(3500, 3500, DockerPortMappingProtocol.TCP)
         )
+        externalRegistry = (
+                DockerImageRegistry.dockerHub(
+                    appName = provider { applicationId },
+                    username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                    password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
+                )
+                )
     }
 }
 
@@ -96,7 +99,9 @@ tasks {
         }
     }
 
-    compileKotlin {
-        kotlinOptions.jvmTarget = "17"
+    withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
     }
 }

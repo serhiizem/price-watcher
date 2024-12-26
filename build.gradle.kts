@@ -46,7 +46,6 @@ release {
 
     preCommitText = "release/"
     versionPropertyFile = "gradle.properties"
-    versionProperties = listOf("appVersion")
 
     git {
         requireBranch = "master"

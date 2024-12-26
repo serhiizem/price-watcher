@@ -8,6 +8,7 @@ plugins {
     kotlin("jvm") version Dependencies.Versions.kotlinPluginVersion
     id("io.ktor.plugin") version Dependencies.Versions.ktorVersion
     kotlin("plugin.serialization") version Dependencies.Versions.kotlinPluginSerializationVersion
+    id("net.researchgate.release") version "3.1.0"
 }
 
 application {
@@ -31,6 +32,21 @@ ktor {
                 password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
             )
         )
+    }
+}
+
+release {
+    failOnCommitNeeded = true
+    failOnUnversionedFiles = false
+    failOnSnapshotDependencies = true
+    revertOnFail = true
+
+    preCommitText = "release/"
+    versionPropertyFile = "gradle.properties"
+    versionProperties = listOf("appVersion")
+
+    git {
+        requireBranch = "master"
     }
 }
 

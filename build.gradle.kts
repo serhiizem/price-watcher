@@ -1,7 +1,8 @@
 import io.ktor.plugin.features.*
 
-group = AppConfig.group
-version = AppConfig.versionName
+val appGroup: String by project
+val appId: String by project
+val appVersion: String by project
 
 plugins {
     kotlin("jvm") version Dependencies.Versions.kotlinPluginVersion
@@ -15,17 +16,17 @@ application {
 
 ktor {
     fatJar {
-        archiveFileName.set("${AppConfig.applicationId}.jar")
+        archiveFileName.set("${appGroup}.jar")
     }
     docker {
         jreVersion = JavaVersion.VERSION_17
-        localImageName = AppConfig.applicationId
-        imageTag = AppConfig.versionName
+        localImageName = appGroup
+        imageTag = appVersion
         portMappings = listOf(
             DockerPortMapping(3500, 3500, DockerPortMappingProtocol.TCP))
         externalRegistry = (
             DockerImageRegistry.dockerHub(
-                appName = provider { AppConfig.applicationId },
+                appName = provider { appGroup },
                 username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
                 password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
             )

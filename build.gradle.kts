@@ -1,8 +1,8 @@
 import io.ktor.plugin.features.*
 
-val appGroup: String by project
-val appId: String by project
-val appVersion: String by project
+val group: String by project
+val applicationId: String by project
+val version: String by project
 
 plugins {
     kotlin("jvm") version Dependencies.Versions.kotlinPluginVersion
@@ -17,17 +17,17 @@ application {
 
 ktor {
     fatJar {
-        archiveFileName.set("${appGroup}.jar")
+        archiveFileName.set("${applicationId}.jar")
     }
     docker {
         jreVersion = JavaVersion.VERSION_17
-        localImageName = appGroup
-        imageTag = appVersion
+        localImageName = applicationId
+        imageTag = version
         portMappings = listOf(
             DockerPortMapping(3500, 3500, DockerPortMappingProtocol.TCP))
         externalRegistry = (
             DockerImageRegistry.dockerHub(
-                appName = provider { appGroup },
+                appName = provider { applicationId },
                 username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
                 password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
             )
@@ -98,9 +98,5 @@ tasks {
 
     compileKotlin {
         kotlinOptions.jvmTarget = "17"
-    }
-
-    shadowJar {
-        version = "0.9"
     }
 }

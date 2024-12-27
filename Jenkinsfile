@@ -11,7 +11,6 @@ pipeline {
             steps {
                 sh """
                     docker --version
-                    echo 'Hello World'
                 """
             }
         }

@@ -1,18 +1,39 @@
 pipeline {
-    agent any
-
+    agent {
+        docker {
+            image 'openjdk:17-alpine'
+        }
+    }
+    environment {
+        GRADLE_USER_HOME = '/tmp/gradle'
+    }
     stages {
-        stage('Hello') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                }
-            }
+        stage('Checkout') {
             steps {
-                sh """
-                    docker --version
-                """
+                checkout scm
             }
+        }
+        stage('Build') {
+            steps {
+                sh './gradlew clean build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh './gradlew test'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            cleanWs()
+        }
+        success {
+            echo 'Build completed successfully!'
+        }
+        failure {
+            echo 'Build failed. Check logs for details.'
         }
     }
 }

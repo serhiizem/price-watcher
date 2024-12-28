@@ -35,7 +35,7 @@ export class JenkinsConstruct extends Construct {
                 ),
                 vpc: props.vpc,
                 subnetType: SubnetType.PUBLIC,
-                exposedPorts: [22, 8080, 9000],
+                exposedPorts: [22, 80, 9000],
                 setupScripts: [readScript("ubuntu-jenkins-instance-setup.sh")]
             }
         );

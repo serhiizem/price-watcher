@@ -7,6 +7,12 @@ pipeline {
     environment {
         GRADLE_USER_HOME = '/tmp/gradle'
     }
+    parameters {
+            choice(
+                name: 'BUILD_TYPE',
+                choices: ['Build', 'Release']
+            )
+        }
     stages {
         stage('Checkout') {
             steps {
@@ -23,6 +29,15 @@ pipeline {
                 sh './gradlew test'
             }
         }
+        stage('Release') {
+            when {
+                expression { params.BUILD_TYPE == 'Release' }
+            }
+            steps {
+                script {
+                    sh './gradlew release'
+                }
+            }
     }
     post {
         always {

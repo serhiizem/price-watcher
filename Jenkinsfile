@@ -38,6 +38,7 @@ pipeline {
                     sh './gradlew release'
                 }
             }
+        }
     }
     post {
         always {

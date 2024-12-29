@@ -10,7 +10,7 @@ pipeline {
     parameters {
             choice(
                 name: 'BUILD_TYPE',
-                choices: ['Build', 'Release']
+                choices: ['BUILD', 'RELEASE']
             )
         }
     stages {
@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Release') {
             when {
-                expression { params.BUILD_TYPE == 'Release' }
+                expression { params.BUILD_TYPE == 'RELEASE' }
             }
             steps {
                 script {

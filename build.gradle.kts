@@ -36,7 +36,7 @@ ktor {
                     username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
                     password = providers.environmentVariable("DOCKER_HUB_PASSWORD"),
                 )
-                )
+        )
     }
 }
 

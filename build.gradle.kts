@@ -1,4 +1,6 @@
 import io.ktor.plugin.features.*
+import net.researchgate.release.BaseScmAdapter
+import net.researchgate.release.GitAdapter
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -47,9 +49,7 @@ release {
     preCommitText = "release/"
     versionPropertyFile = "gradle.properties"
 
-    scmAdapters = [
-        net.researchgate.release.GitAdapter
-    ]
+    scmAdapters = listOf<Class<out BaseScmAdapter>>(GitAdapter::class.java)
 
     git {
         requireBranch = "master"

@@ -47,6 +47,10 @@ release {
     preCommitText = "release/"
     versionPropertyFile = "gradle.properties"
 
+    scmAdapters = [
+        net.researchgate.release.GitAdapter
+    ]
+
     git {
         requireBranch = "master"
     }

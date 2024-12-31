@@ -28,14 +28,14 @@ export class JenkinsConstruct extends Construct {
             "JenkinsInstanceConstruct",
             {
                 instanceName: "JenkinsEc2Instance",
-                instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MICRO),
+                instanceType: InstanceType.of(InstanceClass.T2, InstanceSize.MEDIUM),
                 ami: MachineImage.fromSsmParameter(
                     '/aws/service/canonical/ubuntu/server/focal/stable/current/amd64/hvm/ebs-gp2/ami-id',
                     {os: OperatingSystemType.LINUX},
                 ),
                 vpc: props.vpc,
                 subnetType: SubnetType.PUBLIC,
-                exposedPorts: [22, 80, 9000],
+                exposedPorts: [22, 8080, 9000],
                 setupScripts: [readScript("ubuntu-jenkins-instance-setup.sh")]
             }
         );

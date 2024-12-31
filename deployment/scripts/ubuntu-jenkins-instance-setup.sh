@@ -36,10 +36,6 @@ sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/
 sudo chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
-# Allow accessing Jenkins trough port 80
-sudo iptables -A PREROUTING -t nat -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
-sudo sh -c "iptables-save > /etc/iptables.rules"
-
 sudo apt install jq -y
 
 #################

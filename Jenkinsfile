@@ -4,9 +4,6 @@ pipeline {
             image 'openjdk:17-alpine'
         }
     }
-    environment {
-        GRADLE_USER_HOME = '/tmp/gradle'
-    }
     parameters {
             choice(
                 name: 'BUILD_TYPE',

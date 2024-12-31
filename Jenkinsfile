@@ -31,9 +31,7 @@ pipeline {
                 expression { params.BUILD_TYPE == 'RELEASE' }
             }
             steps {
-                withCredentials([string(credentialsId: 'jenkins-git-pat', variable: 'GITHUB_TOKEN')]) {
-                    sh './gradlew release'
-                }
+                sh './gradlew release'
             }
         }
     }

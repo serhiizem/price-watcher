@@ -36,12 +36,14 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
-                    sh "which git"
-                    sh "git --version"
-                    sh "git config --global user.name 'serhiizem'"
-                    sh "git config --global user.email 'serhiizem@gmail.com'"
-                    sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}"
-                    sh "./gradlew release -Prelease.useAutomaticVersion=true"
+                    script {
+                        sh "which git"
+                        sh "git --version"
+                        sh "git config --global user.name 'serhiizem'"
+                        sh "git config --global user.email 'serhiizem@gmail.com'"
+                        sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}"
+                        sh "./gradlew release -Prelease.useAutomaticVersion=true"
+                    }
                 }
             }
         }

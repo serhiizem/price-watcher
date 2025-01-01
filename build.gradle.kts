@@ -52,7 +52,7 @@ release {
     scmAdapters = listOf<Class<out BaseScmAdapter>>(GitAdapter::class.java)
 
     git {
-        requireBranch.set('master')
+        requireBranch = "master"
     }
 }
 

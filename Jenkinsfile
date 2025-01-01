@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'master', url: 'https://github.com/serhiizem/price-watcher.git'
             }
         }
         stage('Build') {
@@ -30,8 +30,19 @@ pipeline {
             when {
                 expression { params.BUILD_TYPE == 'RELEASE' }
             }
+            environment {
+                GIT_REPO_NAME = "price-watcher"
+                GIT_USER_NAME = "serhiizem"
+            }
             steps {
-                sh './gradlew release'
+                withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
+                    sh '''
+                        git config user.email "serhiizem@gmail.com"
+                        git config user.name "serhiizem"
+                        git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}
+                        ./gradlew release -Prelease.useAutomaticVersion=true
+                    '''
+                }
             }
         }
     }

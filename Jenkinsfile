@@ -7,6 +7,14 @@ pipeline {
        )
     }
     stages {
+        stage('Debug') {
+            steps {
+                script {
+                    echo "BRANCH_NAME: ${env.BRANCH_NAME}"
+                    echo "GIT_URL: ${env.GIT_URL}"
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 git branch: "${env.BRANCH_NAME}", url: "${env.GIT_URL}"

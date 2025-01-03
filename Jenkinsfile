@@ -45,8 +45,10 @@ pipeline {
             when {
                 expression { params.BUILD_TYPE == 'RELEASE' }
             }
-            sh "./gradlew buildImage"
-            sh "./gradlew publishImage"
+            steps {
+                sh "./gradlew buildImage"
+                sh "./gradlew publishImage"
+            }
         }
     }
 }

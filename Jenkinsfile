@@ -47,5 +47,6 @@ pipeline {
             }
             sh "./gradlew buildImage"
             sh "./gradlew publishImage"
+        }
     }
 }

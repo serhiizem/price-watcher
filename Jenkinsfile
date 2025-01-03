@@ -1,15 +1,11 @@
 pipeline {
-    agent {
-        docker {
-            image 'openjdk:17-alpine'
-        }
-    }
+    agent any
     parameters {
-            choice(
-                name: 'BUILD_TYPE',
-                choices: ['BUILD', 'RELEASE']
-            )
-        }
+        choice(
+           name: 'BUILD_TYPE',
+           choices: ['BUILD', 'RELEASE']
+       )
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -36,14 +32,12 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
-                    script {
-                        sh "which git"
-                        sh "git --version"
-                        sh "git config --global user.name 'serhiizem'"
-                        sh "git config --global user.email 'serhiizem@gmail.com'"
-                        sh "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}"
-                        sh "./gradlew release -Prelease.useAutomaticVersion=true"
-                    }
+                    sh """
+                        "git config --global user.name 'serhiizem'"
+                        "git config --global user.email 'serhiizem@gmail.com'"
+                        "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}"
+                        "./gradlew release -Prelease.useAutomaticVersion=true"
+                    """
                 }
             }
         }

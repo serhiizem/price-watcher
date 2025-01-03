@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/serhiizem/price-watcher.git'
+                git branch: "${env.BRANCH_NAME}", url: "${env.GIT_URL}"
             }
         }
         stage('Build') {
@@ -26,28 +26,17 @@ pipeline {
             when {
                 expression { params.BUILD_TYPE == 'RELEASE' }
             }
-            environment {
-                GIT_REPO_NAME = "price-watcher"
-                GIT_USER_NAME = "serhiizem"
-            }
             steps {
                 withCredentials([string(credentialsId: 'github-pat', variable: 'GITHUB_TOKEN')]) {
-                    sh """
-                        "git config --global user.name 'serhiizem'"
-                        "git config --global user.email 'serhiizem@gmail.com'"
-                        "git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}"
-                        "./gradlew release -Prelease.useAutomaticVersion=true"
-                    """
+                    script {
+                        PROJECT_PATH = "${env.GIT_URL}".replaceFirst("https://", "")
+                    }
+                    sh "git config --global user.name 'Jenkins'"
+                    sh "git config --global user.email ''"
+                    sh "git remote set-url origin https://${GITHUB_TOKEN}@${PROJECT_PATH}"
+                    sh "./gradlew release -Prelease.useAutomaticVersion=true"
                 }
             }
-        }
-    }
-    post {
-        success {
-            echo 'Build completed successfully!'
-        }
-        failure {
-            echo 'Build failed. Check logs for details.'
         }
     }
 }

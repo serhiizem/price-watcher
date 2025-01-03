@@ -41,5 +41,11 @@ pipeline {
                 }
             }
         }
+        stage('Publish image') {
+            when {
+                expression { params.BUILD_TYPE == 'RELEASE' }
+            }
+            sh "./gradlew buildImage"
+            sh "./gradlew publishImage"
     }
 }

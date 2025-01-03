@@ -12,7 +12,7 @@ pipeline {
                 script {
                     BRANCH_NAME = "${env.GIT_BRANCH}".replaceFirst("origin/", "")
                 }
-                git branch: "${env.BRANCH_NAME}", url: "${env.GIT_URL}"
+                git branch: "${BRANCH_NAME}", url: "${env.GIT_URL}"
             }
         }
         stage('Build') {

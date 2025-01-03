@@ -7,18 +7,12 @@ pipeline {
        )
     }
     stages {
-        stage('Debug') {
-            steps {
-                script {
-                    echo "BRANCH_NAME: ${env.BRANCH_NAME}"
-                    echo "GIT_BRANCH: ${env.GIT_BRANCH}"
-                    echo "GIT_URL: ${env.GIT_URL}"
-                }
-            }
-        }
         stage('Checkout') {
+            script {
+                BRANCH_NAME = "${env.GIT_BRANCH}".replaceFirst("origin/", "")
+            }
             steps {
-                git branch: "${env.GIT_BRANCH}", url: "${env.GIT_URL}"
+                git branch: "${env.BRANCH_NAME}", url: "${env.GIT_URL}"
             }
         }
         stage('Build') {

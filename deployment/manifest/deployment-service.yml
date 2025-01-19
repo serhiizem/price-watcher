@@ -2,32 +2,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tetris
+  name: pricewatcher
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: tetris
+      app: pricewatcher
   template:
     metadata:
       labels:
-        app: tetris
+        app: pricewatcher
     spec:
       containers:
-      - name: tetris
-        image: ikericookies/tetrisv1:14
+      - name: pricewatcher
+        image: serjayzem/pricewatcher:1.0.4
         ports:
-        - containerPort: 3000
+        - containerPort: 3500
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tetris-service
+  name: pricewatcher-service
 spec:
   selector:
-    app: tetris
+    app: pricewatcher
   ports:
   - protocol: TCP
     port: 80                
-    targetPort: 3000
+    targetPort: 3500
   type: LoadBalancer

@@ -17,6 +17,7 @@ export class K8sConstruct extends Construct {
 
         this.cluster = new Cluster(this, "EksCluster", {
             vpc,
+            clusterName: "PriceWatcherCluster",
             defaultCapacity: 0,
             version: KubernetesVersion.V1_30,
             kubectlLayer: new KubectlV29Layer(this, "kubectl")

@@ -8,6 +8,7 @@ import {ClusterAuth} from "./access/cluster-auth";
 import {User} from "aws-cdk-lib/aws-iam";
 import {AppConfig} from "./config/app-config";
 import {MonitoringConstruct} from "./constructs/monitoring-construct";
+import {DynamodbConstruct} from "./constructs/dynamodb-construct";
 
 export class DeploymentStack extends Stack {
 
@@ -25,5 +26,6 @@ export class DeploymentStack extends Stack {
 
         new ArgoConstruct(this, "ArgoHelmConstruct", {cluster});
         new MonitoringConstruct(this, "MonitoringConstruct", {cluster});
+        new DynamodbConstruct(this, "DynamoDbConstruct");
     }
 }

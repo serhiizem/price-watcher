@@ -18,8 +18,9 @@ export class DeploymentStack extends Stack {
         const {vpc} = new NetworkingConstruct(this, "NetworkingConstruct");
         const {cluster} = new K8sConstruct(this, "K8sConstruct", {vpc});
         const {instance: jenkins} = new JenkinsConstruct(this, "JenkinsConstruct", {vpc});
-        const deployer = User.fromUserName(this, "CdkUser", AppConfig.cdkUsername);
+        jenkins.node.addDependency(cluster);
 
+        const deployer = User.fromUserName(this, "CdkUser", AppConfig.cdkUsername);
         ClusterAuth.of(cluster)
             .allowAccessToInstance(jenkins)
             .allowAccessToUser(deployer);

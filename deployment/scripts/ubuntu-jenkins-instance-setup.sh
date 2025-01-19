@@ -4,7 +4,6 @@
 sudo apt update -y
 sudo apt install openjdk-17-jre -y
 sudo apt install openjdk-17-jdk -y
-java --version
 
 # install Jenkins
 curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
@@ -36,10 +35,6 @@ sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/
 sudo chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 
-sudo apt install jq -y
+aws eks update-kubeconfig --region us-east-1 --name PriceWatcherCluster
 
-#################
-jenkins --version
-docker --version
-kubectl version
-aws --version
+sudo apt install jq -y

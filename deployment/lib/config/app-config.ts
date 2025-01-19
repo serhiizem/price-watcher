@@ -4,5 +4,6 @@ import * as path from "node:path";
 dotenv.config({path: path.resolve(__dirname, "../../../.env")});
 
 export const AppConfig = {
-    cdkUsername: process.env.CDK_USERNAME as string
+    cdkUsername: process.env.CDK_USERNAME as string,
+    grafanaAdmin: process.env.GRAFANA_ADMIN as string
 }

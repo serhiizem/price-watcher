@@ -1,6 +1,7 @@
 import {Construct} from "constructs";
 import {Cluster} from "aws-cdk-lib/aws-eks";
 import {Duration} from "aws-cdk-lib";
+import {AppConfig} from "../config/app-config";
 
 interface MonitoringConstructProps {
     cluster: Cluster
@@ -38,7 +39,7 @@ export class MonitoringConstruct extends Construct {
                         type: "LoadBalancer",
                         port: 3000
                     },
-                    adminPassword: "admin",
+                    adminPassword: AppConfig.grafanaAdmin,
                     replicaCount: 1
                 },
                 alertmanager: {

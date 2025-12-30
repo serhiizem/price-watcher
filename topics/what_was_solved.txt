@@ -1,0 +1,4 @@
+1. git was not found due to docker agent executing pipeline using jdk image that does not include git
+2. user was not added to EKS RBAC
+3. POD should be exposed through LB
+4. helm chart was not being deployed due to insufficient node instance size

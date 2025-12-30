@@ -1,0 +1,38 @@
+❌  EksStack failed: Error: The stack named EksStack failed creation, it may need to be manually deleted from the AWS console: ROLLBACK_COMPLETE: Received response status [FAILED] from custom resource. Message returned: Error: b'Release "eksstackeksclusterchartargocd4c095d84" does not exist. Installing it now.\nError: looks like "https://argoproj.github.io" is not a valid chart repository or cannot be reached: failed to fetch https://argoproj.github.io/index.yaml : 404 Not Found\n'
+
+Logs: /aws/lambda/EksStack-awscdkawseksKubectlProvid-Handler886CB40B-WeT4M9h3Uwat
+
+    at invokeUserFunction (/var/task/framework.js:2:6)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async onEvent (/var/task/framework.js:1:369)
+    at async Runtime.handler (/var/task/cfn-response.js:1:1826) (RequestId: 84927ce3-e4c5-49ba-a84d-3303b0155858)
+    at FullCloudFormationDeployment.monitorDeployment (/home/serhiizem/.nvm/versions/node/v20.17.0/lib/node_modules/aws-cdk/lib/index.js:447:10567)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.deployStack2 [as deployStack] (/home/serhiizem/.nvm/versions/node/v20.17.0/lib/node_modules/aws-cdk/lib/index.js:450:200276)
+    at async /home/serhiizem/.nvm/versions/node/v20.17.0/lib/node_modules/aws-cdk/lib/index.js:450:181698
+
+ ❌ Deployment failed: Error: The stack named EksStack failed creation, it may need to be manually deleted from the AWS console: ROLLBACK_COMPLETE: Received response status [FAILED] from custom resource. Message returned: Error: b'Release "eksstackeksclusterchartargocd4c095d84" does not exist. Installing it now.\nError: looks like "https://argoproj.github.io" is not a valid chart repository or cannot be reached: failed to fetch https://argoproj.github.io/index.yaml : 404 Not Found\n'
+
+Logs: /aws/lambda/EksStack-awscdkawseksKubectlProvid-Handler886CB40B-WeT4M9h3Uwat
+
+    at invokeUserFunction (/var/task/framework.js:2:6)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async onEvent (/var/task/framework.js:1:369)
+    at async Runtime.handler (/var/task/cfn-response.js:1:1826) (RequestId: 84927ce3-e4c5-49ba-a84d-3303b0155858)
+    at FullCloudFormationDeployment.monitorDeployment (/home/serhiizem/.nvm/versions/node/v20.17.0/lib/node_modules/aws-cdk/lib/index.js:447:10567)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.deployStack2 [as deployStack] (/home/serhiizem/.nvm/versions/node/v20.17.0/lib/node_modules/aws-cdk/lib/index.js:450:200276)
+    at async /home/serhiizem/.nvm/versions/node/v20.17.0/lib/node_modules/aws-cdk/lib/index.js:450:181698
+****************************************************
+*** Newer version of CDK is available [2.158.0]  ***
+*** Upgrade recommended (npm install -g aws-cdk) ***
+****************************************************
+
+The stack named EksStack failed creation, it may need to be manually deleted from the AWS console: ROLLBACK_COMPLETE: Received response status [FAILED] from custom resource. Message returned: Error: b'Release "eksstackeksclusterchartargocd4c095d84" does not exist. Installing it now.\nError: looks like "https://argoproj.github.io" is not a valid chart repository or cannot be reached: failed to fetch https://argoproj.github.io/index.yaml : 404 Not Found\n'
+
+Logs: /aws/lambda/EksStack-awscdkawseksKubectlProvid-Handler886CB40B-WeT4M9h3Uwat
+
+    at invokeUserFunction (/var/task/framework.js:2:6)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async onEvent (/var/task/framework.js:1:369)
+    at async Runtime.handler (/var/task/cfn-response.js:1:1826) (RequestId: 84927ce3-e4c5-49ba-a84d-3303b0155858)
